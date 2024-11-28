@@ -1,10 +1,10 @@
 from logging import getLogger
 from logging.config import dictConfig
 
-from book_manager import Manager
+from commands import is_valid_command, show_commands
 from config import LOGGERS
-from exceptions import ValidationError
-from utils.other import prepare_app, show_menu, validate_number
+from manager import Manager
+from utils import prepare_app
 
 
 def main() -> None:
@@ -12,21 +12,17 @@ def main() -> None:
 
     print("\nКнижный менеджер запущен.\n")
     while True:
-        show_menu()
+        show_commands()
         number = input("\nВведите номер команды: ").strip()
 
-        try:
-            validate_number(number)
-        except ValidationError as error:
-            print(error)
+        if not is_valid_command(number):
             continue
 
-        if not manager.run_command(number):
-            return
+        manager.execute_command(number)
+        if manager.keep_running():
+            continue
 
-        keep_running = input("\nЗавершить работу? [1-Да/2-Нет]: ").strip()
-        if keep_running == "1":
-            return
+        break
 
 
 if __name__ == "__main__":

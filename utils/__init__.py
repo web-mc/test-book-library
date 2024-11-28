@@ -1,2 +1,2 @@
-from .other import prepare_app, show_menu, validate_number
+from .other import prepare_app, get_field
 from .text import calculate_levenshtein_distance
