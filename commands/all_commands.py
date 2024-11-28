@@ -1,11 +1,12 @@
 from typing import Final, Callable
 from .add_book import add_book
+from .delete import delete_book
 
 
 COMMANDS: Final[dict[str, tuple[str, Callable]]] = {
     "0": ("Завершить работу", lambda db: False),
     "1": ("Добавить книгу", add_book),
-    "2": ("Удалить книгу", None),
+    "2": ("Удалить книгу", delete_book),
     # "3": ("Найти книгу", None),
     # "4": ("Показать все книги", None),
     # "5": ("Изменить статус книги", None),

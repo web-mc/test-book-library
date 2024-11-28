@@ -1,6 +1,6 @@
 from book import Book
-from utils import get_field
 from database import Database
+from utils import get_field
 
 
 def add_book(db: Database) -> None:
@@ -20,7 +20,7 @@ def _get_new_book_from_user() -> Book:
     book.author = get_field("Введите автора книги: ")
     while True:
         year = get_field("Введите год книги(только цифры): ")
-        if not year or not year.isdigit():
+        if not year.isdigit():
             print(f'Выражение "{year}" не является цифрой.\n')
             continue
 

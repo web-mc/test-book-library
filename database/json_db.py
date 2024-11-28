@@ -1,8 +1,9 @@
-from typing import Literal
-from config import app_config
 import json
-from .database import Database
+
 from book import Book
+from config import app_config
+
+from .database import Database
 
 
 class JsonDB(Database):
@@ -22,5 +23,13 @@ class JsonDB(Database):
             books = json.load(file)
 
         books[book.id] = book.__dict__
+        with open(self.file, "w", encoding="utf-8") as file:
+            json.dump(books, file, indent=4, ensure_ascii=False)
+
+    def del_book_by_id(self, id: str) -> Book | None:
+        with open(self.file, "r", encoding="utf-8") as file:
+            books = json.load(file)
+
+        del books[id]
         with open(self.file, "w", encoding="utf-8") as file:
             json.dump(books, file, indent=4, ensure_ascii=False)
