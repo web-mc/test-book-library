@@ -1,6 +1,6 @@
 from commands import COMMANDS
-from utils import get_field
 from database import JsonDB
+from utils import get_field
 
 
 class Manager:

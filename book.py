@@ -1,5 +1,5 @@
 from hashlib import md5
-from typing import Any, Literal, Self
+from typing import Any, Literal
 
 
 class Book:
@@ -8,7 +8,7 @@ class Book:
         self.title: str = ""
         self.author: str = ""
         self.year: int | None = None
-        self.status: Literal["в наличии", "выдана"] = "в наличии"
+        self.status: Literal["В наличии", "Выдана"] = "В наличии"
 
     def generate_book_id(self) -> None:
         str_to_hash = f"{self.title}{self.author}{self.year}"
@@ -18,9 +18,9 @@ class Book:
     @staticmethod
     def parse(book_data: dict[str, Any]) -> "Book":
         book = Book()
-        book.id = book_data.get("id", "")
-        book.title = book_data.get("title", "")
-        book.author = book_data.get("author", "")
-        book.year = book_data.get("year", None)
-        book.status = book_data.get("status", "в наличии")
+        book.id = book_data["id"]
+        book.title = book_data["title"]
+        book.author = book_data["author"]
+        book.year = book_data["year"]
+        book.status = book_data["status"]
         return book

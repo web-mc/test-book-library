@@ -26,10 +26,18 @@ class JsonDB(Database):
         with open(self.file, "w", encoding="utf-8") as file:
             json.dump(books, file, indent=4, ensure_ascii=False)
 
-    def del_book_by_id(self, id: str) -> Book | None:
+    def del_book_by_id(self, book_id: str) -> Book | None:
         with open(self.file, "r", encoding="utf-8") as file:
             books = json.load(file)
 
-        del books[id]
+        del books[book_id]
+        with open(self.file, "w", encoding="utf-8") as file:
+            json.dump(books, file, indent=4, ensure_ascii=False)
+
+    def update_book_status(self, book_id: str, new_status: str) -> None:
+        with open(self.file, "r", encoding="utf-8") as file:
+            books = json.load(file)
+
+        books[book_id]["status"] = new_status
         with open(self.file, "w", encoding="utf-8") as file:
             json.dump(books, file, indent=4, ensure_ascii=False)

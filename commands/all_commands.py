@@ -1,7 +1,8 @@
-from typing import Final, Callable
-from .add_book import add_book
-from .delete import delete_book
+from typing import Callable, Final
 
+from .add_book import add_book
+from .change_status import change_book_status
+from .delete import delete_book
 
 COMMANDS: Final[dict[str, tuple[str, Callable]]] = {
     "0": ("Завершить работу", lambda db: False),
@@ -9,10 +10,8 @@ COMMANDS: Final[dict[str, tuple[str, Callable]]] = {
     "2": ("Удалить книгу", delete_book),
     # "3": ("Найти книгу", None),
     # "4": ("Показать все книги", None),
-    # "5": ("Изменить статус книги", None),
+    "5": ("Изменить статус книги", change_book_status),
 }
-
-
 
 
 def is_valid_command(number: str) -> bool:
