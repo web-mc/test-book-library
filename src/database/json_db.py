@@ -1,14 +1,22 @@
 import json
+from typing import Any
+from pathlib import Path
 
-from book import Book
-from config import app_config
+from src.book import Book
+from src.config import app_config
 
 from .database import Database
 
 
 class JsonDB(Database):
+    """
+    JsonDB - это конкретная реализация абстрактного класса Database,
+    использующая JSON-файл для хранения и управления данными о книгах.
+    Она взаимодействует с JSON-файлом, указанным в конфигурации приложения.
+    """
+
     def __init__(self) -> None:
-        self.file = app_config.data_file
+        self.file: Path = app_config.data_file
 
     def get_book_by_id(self, id: str) -> None | Book:
         with open(self.file, "r", encoding="utf-8") as file:
@@ -41,3 +49,8 @@ class JsonDB(Database):
         books[book_id]["status"] = new_status
         with open(self.file, "w", encoding="utf-8") as file:
             json.dump(books, file, indent=4, ensure_ascii=False)
+
+    def get_all_books(self) -> dict[str, dict[str, Any]]:
+        with open(self.file, "r", encoding="utf-8") as file:
+            books = json.load(file)
+        return books

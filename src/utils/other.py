@@ -1,6 +1,6 @@
 import json
 
-from config import app_config
+from src.config import app_config
 
 
 def get_field(prompt: str) -> str:

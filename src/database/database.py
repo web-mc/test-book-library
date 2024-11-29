@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
-from book import Book
+from src.book import Book
 
 
 class Database(ABC):
@@ -18,4 +19,8 @@ class Database(ABC):
 
     @abstractmethod
     def update_book_status(self, book_id: str, new_status: str) -> None:
+        pass
+
+    @abstractmethod
+    def get_all_books(self) -> dict[str, dict[str, Any]]:
         pass

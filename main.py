@@ -1,10 +1,10 @@
 from logging import getLogger
 from logging.config import dictConfig
 
-from commands import is_valid_command, show_commands
-from config import LOGGERS
-from manager import Manager
-from utils import prepare_app
+from src.commands import is_valid_command, show_commands
+from src.config import LOGGERS
+from src.manager import Manager
+from src.utils import prepare_app
 
 
 def main() -> None:

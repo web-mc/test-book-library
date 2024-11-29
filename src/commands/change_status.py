@@ -1,7 +1,7 @@
 from typing import Literal
 
-from database import Database
-from utils import get_field
+from src.database import Database
+from src.utils import get_field
 
 
 def change_book_status(db: Database) -> None:

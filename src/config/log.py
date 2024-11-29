@@ -61,10 +61,10 @@ LOGGERS = {
     },
     "filters": {
         "error_filter": {
-            "()": "config.log.ErrorFilter",
+            "()": "src.config.log.ErrorFilter",
         },
         "info_filter": {
-            "()": "config.log.InfoFilter",
+            "()": "src.config.log.InfoFilter",
         },
     },
 }

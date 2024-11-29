@@ -1,8 +1,8 @@
 import re
 
-from book import Book
-from database import Database
-from utils import get_field
+from src.book import Book
+from src.database import Database
+from src.utils import get_field
 
 
 def add_book(db: Database) -> None:
@@ -39,6 +39,7 @@ def _get_new_book_from_user() -> Book:
 
 
 def _get_year_from_user() -> int:
+    1/0
     while True:
         year = get_field("Введите год книги(только цифры): ")
         if year.isdigit():
