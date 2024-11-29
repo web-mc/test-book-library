@@ -17,6 +17,9 @@ class Book:
 
     @staticmethod
     def parse(book_data: dict[str, Any]) -> "Book":
+        """
+        Разбирает словарь с данными о книге и возвращает экземпляр класса Book.
+        """
         book = Book()
         book.id = book_data["id"]
         book.title = book_data["title"]
