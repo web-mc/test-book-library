@@ -40,9 +40,9 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\nПрограмма остановлена.")
+        pass
     except Exception as error:
         logger.exception(error)
         print(f"\nНепредвиденная ошибка: {error}. Детали смотрите в логах.")
     finally:
-        print("Книжный менеджер завершил работу.")
+        print("\nКнижный менеджер завершил работу.")

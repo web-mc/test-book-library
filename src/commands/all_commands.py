@@ -9,7 +9,7 @@ COMMANDS: Final[dict[str, tuple[str, Callable]]] = {
     "0": ("Завершить работу", lambda db: False),
     "1": ("Добавить книгу", add_book),
     "2": ("Удалить книгу", delete_book),
-    # "3": ("Найти книгу", None),
+    # "3": ("Найти книгу", None), #TODO: Найти книгу
     "4": ("Показать все книги", show_all_books),
     "5": ("Изменить статус книги", change_book_status),
 }
