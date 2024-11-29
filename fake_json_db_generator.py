@@ -1,12 +1,12 @@
 import random
 import uuid
-from typing import Generator
+from typing import Any, Generator, Dict
 
 import json
 from src.config import app_config
 
 
-def generate_random_data() -> Generator[dict[str, str | int]]:
+def generate_random_data() -> Generator[Dict[str, str | Any], None, None]:
     """
     Генератор для создания фейковых книг.
     """
@@ -72,14 +72,15 @@ def generate_random_data() -> Generator[dict[str, str | int]]:
         }
 
 
+# Пример использования
 if __name__ == "__main__":
     data_generator = generate_random_data()
     books = {}
-    for i in range(1, 10_000):
+    for i in range(1, 13):
         book = next(data_generator)
         books[book["id"]] = book
 
-        if i % 1000 == 0:
+        if i % 500 == 0:
             print("Готово", i, "книг.")
 
     with open(app_config.data_file, "w", encoding="utf-8") as json_file:

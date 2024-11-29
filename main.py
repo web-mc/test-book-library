@@ -18,7 +18,7 @@ def main() -> None:
     manager = Manager(JsonDB)
     manager.prepare()
 
-    print("\nКнижный менеджер запущен.\n")
+    print("\nКнижный менеджер запущен.")
     while True:
         show_commands()
         number = input("\nВведите номер команды: ").strip()

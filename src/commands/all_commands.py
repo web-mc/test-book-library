@@ -28,6 +28,6 @@ def is_valid_command(number: str) -> bool:
 
 
 def show_commands() -> None:
-    print("Выбирите команду указав соответствующую цифру: ")
+    print("\nВыбирите команду указав соответствующую цифру: ")
     for key, value in COMMANDS.items():
         print(f"{key}. {value[0]}")
