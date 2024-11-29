@@ -1,5 +1,5 @@
-from src.database import Database
-from src.utils import get_field
+from ..database import Database
+from ..utils import get_field
 
 
 def delete_book(db: Database) -> None:
@@ -13,7 +13,7 @@ def delete_book(db: Database) -> None:
     confirmation = _get_del_confimation()
     if confirmation:
         db.del_book_by_id(book_id)
-        print(f"Удалена книга: {book.__dict__}")
+        print(f"Удалена книга: {book.dump()}")
     else:
         print("Удаление книги отменено.")
 

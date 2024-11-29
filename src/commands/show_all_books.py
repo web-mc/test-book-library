@@ -1,5 +1,5 @@
-from src.database import Database
-from src.utils import get_field
+from ..database import Database
+from ..utils import get_field
 
 
 def show_all_books(db: Database) -> None:

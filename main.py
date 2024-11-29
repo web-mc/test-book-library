@@ -2,9 +2,9 @@ from logging import getLogger
 from logging.config import dictConfig
 
 from src.commands import is_valid_command, show_commands
-from src.config import LOGGERS
+from src.config import LOGGERS, app_config
+from src.database import JsonDB
 from src.manager import Manager
-from src.utils import prepare_app
 
 
 def main() -> None:
@@ -15,7 +15,8 @@ def main() -> None:
     получает ввод от пользователя, обрабатывает команды и
     останавливает приложение, если пользователь выбрал соответствующую команду.
     """
-    manager = Manager()
+    manager = Manager(JsonDB)
+    manager.prepare()
 
     print("\nКнижный менеджер запущен.\n")
     while True:
@@ -33,14 +34,14 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    prepare_app()
-
+    app_config.log_dir.mkdir(exist_ok=True)
     dictConfig(LOGGERS)
     logger = getLogger()
+
     try:
         main()
     except KeyboardInterrupt:
-        pass
+        print("\nРучная остановка.")
     except Exception as error:
         logger.exception(error)
         print(f"\nНепредвиденная ошибка: {error}. Детали смотрите в логах.")

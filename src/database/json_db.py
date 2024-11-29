@@ -2,8 +2,8 @@ import json
 from typing import Any
 from pathlib import Path
 
-from src.book import Book
-from src.config import app_config
+from ..book import Book
+from ..config import app_config
 
 from .database import Database
 
@@ -18,6 +18,19 @@ class JsonDB(Database):
     def __init__(self) -> None:
         self.file: Path = app_config.data_file
 
+    @staticmethod
+    def prepare_db() -> None:
+        """
+        Подготавливает БД, создавая необходимые директории
+        и файлы. Обеспечивает наличие директории для данных,
+        а также инициализирует пустой JSON-файл, если он отсутствует.
+        """
+        app_config.data_dir.mkdir(exist_ok=True)
+
+        if not app_config.data_file.exists():
+            with open(app_config.data_file, "w", encoding="utf-8") as file:
+                json.dump({}, file, indent=4, ensure_ascii=False)
+
     def get_book_by_id(self, id: str) -> None | Book:
         with open(self.file, "r", encoding="utf-8") as file:
             books = json.load(file)
@@ -30,7 +43,7 @@ class JsonDB(Database):
         with open(self.file, "r", encoding="utf-8") as file:
             books = json.load(file)
 
-        books[book.id] = book.__dict__
+        books[book.id] = book.dump()
         with open(self.file, "w", encoding="utf-8") as file:
             json.dump(books, file, indent=4, ensure_ascii=False)
 

@@ -7,7 +7,7 @@ class Book:
         self.id: str = ""
         self.title: str = ""
         self.author: str = ""
-        self.year: int | None = None
+        self.year: int = 0
         self.status: Literal["В наличии", "Выдана"] = "В наличии"
 
     def generate_book_id(self) -> None:
@@ -27,3 +27,12 @@ class Book:
         book.year = book_data["year"]
         book.status = book_data["status"]
         return book
+
+    def dump(self) -> dict[str, str | int]:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author": self.author,
+            "year": self.year,
+            "status": self.status,
+        }

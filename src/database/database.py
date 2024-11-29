@@ -1,10 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from src.book import Book
+from ..book import Book
 
 
 class Database(ABC):
+    @staticmethod
+    @abstractmethod
+    def prepare_db() -> None:
+        """
+        Подготавливает БД, создавая объекты, необходимые для
+        хранения данных приложения.
+        """
+
     @abstractmethod
     def get_book_by_id(self, id: str) -> Book | None:
         pass
