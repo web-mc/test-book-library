@@ -1,4 +1,5 @@
 import json
+from itertools import islice
 from pathlib import Path
 from typing import Any
 
@@ -38,32 +39,39 @@ class JsonDB(Database):
         return None
 
     def save_book(self, book: Book) -> None:
-        with open(self.file, "r", encoding="utf-8") as file:
+        with open(self.file, "r+", encoding="utf-8") as file:
             books = json.load(file)
 
-        books[book.id] = book.dump()
-        with open(self.file, "w", encoding="utf-8") as file:
+            books[book.id] = book.dump()
+            file.seek(0)
             json.dump(books, file, indent=4, ensure_ascii=False)
+
 
     def del_book_by_id(self, book_id: str) -> Book | None:
-        with open(self.file, "r", encoding="utf-8") as file:
+        with open(self.file, "r+", encoding="utf-8") as file:
             books = json.load(file)
 
-        del books[book_id]
-        with open(self.file, "w", encoding="utf-8") as file:
+            del books[book_id]
+
+            file.seek(0)
             json.dump(books, file, indent=4, ensure_ascii=False)
+            file.truncate()
 
     def update_book_status(self, book_id: str, new_status: str) -> None:
-        with open(self.file, "r", encoding="utf-8") as file:
+        with open(self.file, "r+", encoding="utf-8") as file:
             books = json.load(file)
 
-        books[book_id]["status"] = new_status
-        with open(self.file, "w", encoding="utf-8") as file:
+            books[book_id]["status"] = new_status
+            file.seek(0)
             json.dump(books, file, indent=4, ensure_ascii=False)
 
     def get_part_data(self, offset: int, limit: int) -> tuple[Any, ...]:
         with open(self.file, "r", encoding="utf-8") as file:
             books = json.load(file)
 
-        books_tuple = tuple(tuple(value.values()) for value in books.values())
-        return books_tuple[offset : offset + limit]
+        # Итерация по значениям словаря в диапазоне
+        books_iterator = islice(books.values(), offset, offset + limit)
+
+        # Преобразуем только выбранные элементы в кортежи
+        books_tuple = tuple(tuple(value.values()) for value in books_iterator)
+        return books_tuple
