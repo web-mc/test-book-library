@@ -32,3 +32,9 @@ class Database(ABC):
     @abstractmethod
     def get_part_data(self, offset, limit) -> tuple[Any, ...]:
         pass
+
+    @abstractmethod
+    def get_books_by_year(
+        self, ondition_data: tuple[str, *tuple[int, ...]]
+    ) -> tuple[Any, ...]:
+        pass

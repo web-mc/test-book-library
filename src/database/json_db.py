@@ -47,7 +47,6 @@ class JsonDB(Database):
             json.dump(books, file, indent=4, ensure_ascii=False)
             file.truncate()
 
-
     def del_book_by_id(self, book_id: str) -> Book | None:
         with open(self.file, "r+", encoding="utf-8") as file:
             books = json.load(file)
@@ -77,3 +76,21 @@ class JsonDB(Database):
         # Преобразуем только выбранные элементы в кортежи
         books_tuple = tuple(tuple(value.values()) for value in books_iterator)
         return books_tuple
+
+    def get_books_by_year(
+        self, condition: tuple[str, *tuple[int, ...]]
+    ) -> tuple[Any, ...]:
+        with open(self.file, "r", encoding="utf-8") as file:
+            books = json.load(file)
+
+        operator, *years = condition
+        filters = {
+            "=": lambda book: book["year"] == years[0],
+            ">": lambda book: book["year"] >= years[0],
+            "<": lambda book: book["year"] <= years[0],
+            "-": lambda book: years[0] <= book["year"] <= years[1],
+        }
+
+        # делаем генератор с уже нужными нам рещультатми поиска
+        result = (book for book in books.values() if filters[operator](book))
+        return tuple(tuple(value.values()) for value in result)

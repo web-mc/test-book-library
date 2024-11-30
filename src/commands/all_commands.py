@@ -3,15 +3,16 @@ from typing import Callable, Final
 from .add_book import add_book
 from .change_status import change_book_status
 from .delete import delete_book
+from .search_book import search_book
 from .show_all_books import show_all_books
 
 COMMANDS: Final[dict[str, tuple[str, Callable]]] = {
     "0": ("Завершить работу", lambda db: False),
     "1": ("Добавить книгу", add_book),
     "2": ("Удалить книгу", delete_book),
-    # "3": ("Найти книгу", None), #TODO: Найти книгу
-    "4": ("Показать все книги", show_all_books),
-    "5": ("Изменить статус книги", change_book_status),
+    "3": ("Изменить статус книги", change_book_status),
+    "4": ("Найти книгу", search_book),  # TODO: Найти книгу
+    "5": ("Показать все книги", show_all_books),
 }
 
 
