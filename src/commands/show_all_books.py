@@ -6,7 +6,6 @@ from .utils import Paginator
 
 def show_all_books(db: Database) -> None:
     paginator = Paginator(db)
-
     while True:
         paginator.get_page_data()
 
@@ -29,7 +28,8 @@ def _get_choice_from_user() -> int:
     print("----------------------")
     print("--- Меню пагинации ---")
     while True:
-        choice = get_field("--- 0 - Выход, 1 - Назад, 2 - Вперед: ")
+        print("--- 0. В главное меню | 1. Назад | 2. Вперед")
+        choice = get_field("--- Введите цифру: ")
         if choice not in ["0", "1", "2"]:
             print("Некорректный ввод. Пожалуйста, введите 0, 1 или 2.")
             continue

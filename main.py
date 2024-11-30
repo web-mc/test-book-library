@@ -27,7 +27,7 @@ def main() -> None:
             continue
 
         manager.execute_command(number)
-        if manager.keep_running():
+        if not manager.exit():
             continue
 
         break
@@ -44,6 +44,6 @@ if __name__ == "__main__":
         print("\nРучная остановка.")
     except Exception as error:
         logger.exception(error)
-        print(f"\nНепредвиденная ошибка: {error}. Детали смотрите в логах.")
+        print(f"\nНепредвиденная ошибка:\n{error}\nДетали смотрите в логах.")
     finally:
         print("\nКнижный менеджер завершил работу.")

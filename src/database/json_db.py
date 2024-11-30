@@ -45,6 +45,7 @@ class JsonDB(Database):
             books[book.id] = book.dump()
             file.seek(0)
             json.dump(books, file, indent=4, ensure_ascii=False)
+            file.truncate()
 
 
     def del_book_by_id(self, book_id: str) -> Book | None:
@@ -64,6 +65,7 @@ class JsonDB(Database):
             books[book_id]["status"] = new_status
             file.seek(0)
             json.dump(books, file, indent=4, ensure_ascii=False)
+            file.truncate()
 
     def get_part_data(self, offset: int, limit: int) -> tuple[Any, ...]:
         with open(self.file, "r", encoding="utf-8") as file:

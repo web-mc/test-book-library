@@ -29,9 +29,6 @@ class Database(ABC):
     def update_book_status(self, book_id: str, new_status: str) -> None:
         pass
 
-    # @abstractmethod
-    # def get_all_books(self) -> dict[str, dict[str, Any]]:
-    #     pass
     @abstractmethod
     def get_part_data(self, offset, limit) -> tuple[Any, ...]:
         pass

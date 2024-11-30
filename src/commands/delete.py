@@ -3,7 +3,8 @@ from ..utils import get_field
 
 
 def delete_book(db: Database) -> None:
-    book_id = get_field("Введите ID книги: ")
+    print("Начато удаление книги.")
+    book_id = get_field("Введите ID книги для удаления: ")
 
     book = db.get_book_by_id(book_id)
     if not book:
