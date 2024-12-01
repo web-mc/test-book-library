@@ -2,9 +2,9 @@
 
 Другие ссылки на документы:
 
- - [Устройство поиска](src\utils\search_engine\README.md)
- - [Модуль с командами](src\utils\search_engine\README.md)
- - [Пагинатор](src\utils\search_engine\README.md)
+ - [Устройство поиска](src/utils/search_engine/README.md)
+ - [Модуль с командами](src/utils/search_engine/README.md)
+ - [Пагинатор](src/utils/search_engine/README.md)
 
 
 ## Описание
