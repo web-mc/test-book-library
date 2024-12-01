@@ -64,17 +64,17 @@ class SearchEngine:
         pass
 
     def _search_by_year(self) -> None:
-        print("Поиск по году начат. Введите условие поиска.")
+        title = "Поиск по году"
 
         while True:
-            msg = "Поиск по году. Введите условие поиска или '0' для выхода в меню поиска: "
+            msg = f"{title}. Введите условие поиска или '0' для выхода в меню поиска: "
             condition = get_field(msg)
 
             if condition == "0":
                 self.stay_in_menu = True
                 return
 
-            search_results = self._get_search_results(condition)
+            search_results = self._get_search_results(title, condition)
             if not search_results:
                 continue
 
@@ -89,19 +89,27 @@ class SearchEngine:
             if not paginator.keep_running:
                 return
 
-    def _get_search_results(self, condition: str) -> None | tuple[Any, ...]:
-        condition_data = self._parse_condition(condition)
+    def _get_search_results(
+        self,
+        title: str,
+        condition: str,
+    ) -> None | tuple[Any, ...]:
+        condition_data = self._parse_condition(title, condition)
         if not condition_data:
-            print("Некорректное условие для поиска. Смотрите справку.")
+            print(f"{title}. Некорректное условие для поиска. Смотрите справку.")
             return
 
         books = self.db.get_books_by_year(condition_data)
         if not books:
-            print(f"Не нашлось книг по условию '{condition}'.\n")
+            print(f"{title}. Не нашлось книг по условию '{condition}'.\n")
 
         return books
 
-    def _parse_condition(self, condition: str) -> None | tuple[str, *tuple[int, ...]]:
+    def _parse_condition(
+        self,
+        title: str,
+        condition: str,
+    ) -> None | tuple[str, *tuple[int, ...]]:
         pattern = r"^[=<>-]\d+,?[\d+]?"
         res = re.match(pattern, condition)
         if not res:
@@ -114,7 +122,7 @@ class SearchEngine:
             start, end = years[0], years[1]
             if int(start) > int(end):
                 print(
-                    f"\nОшибка. {start} не меньше {end}. "
+                    f"\n{title}. Ошибка. {start} не меньше {end}. "
                     f"Может хотели '-{end},{start}'?"
                 )
                 return
@@ -122,7 +130,9 @@ class SearchEngine:
         return (symbols, *[int(year) for year in years])
 
     def _set_page_data(
-        self, books: tuple[Any, ...], paginator: Paginator
+        self,
+        books: tuple[Any, ...],
+        paginator: Paginator,
     ) -> tuple[Any, ...]:
         """
         Проверяет, совпадает ли текущая страница с предыдущей,

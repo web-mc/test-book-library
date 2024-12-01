@@ -30,8 +30,8 @@ def _get_search_option_from_user(options: dict[int, tuple[str, Callable]]) -> in
     while True:
         print("\nПоиск книги. Выбирите нужную команду введя цифру:")
         print(menu)
-        choice = get_field("Введите цифру: ")
+        choice = get_field("Поиск книги. Введите цифру: ")
         if choice not in menu_numbers:
-            print("Некорректный ввод. Пожалуйста, введите цифру из меню.\n")
+            print("Поиск книги. Некорректный ввод. Пожалуйста, введите цифру из меню.")
             continue
         return int(choice)
