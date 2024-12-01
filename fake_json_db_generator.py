@@ -75,7 +75,7 @@ def generate_random_data() -> Generator[Dict[str, str | Any], None, None]:
 def main() -> None:
     data_generator = generate_random_data()
     books = {}
-    for i in range(1, 13):
+    for i in range(1, 50_000):
         book = next(data_generator)
         books[book["id"]] = book
 

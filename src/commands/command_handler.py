@@ -1,14 +1,12 @@
-from typing import Callable, Dict
-
-# Импорты функциональности для команд
-from .commands.add_book import add_book
-from .commands.change_status import change_book_status
-from .commands.delete import delete_book
-from .commands.search_book import search_book
-from .commands.show_all_books import show_all_books
+from typing import Callable
 
 from src.database import Database, JsonDB
-from src.utils import get_field
+
+from .add_book import add_book
+from .show_all_books import show_all_books
+from .delete import delete_book
+from .search_book import search
+from .change_status import change_book_status
 
 
 class Command:
@@ -18,7 +16,7 @@ class Command:
         """
         Инициализация команды.
         :param title: Описание команды.
-        :param action: Функция, выполняющая действие.
+        :param function: Функция, выполняющая действие.
         """
         self.title = title
         self.run_function = function
@@ -35,7 +33,7 @@ class CommandHandler:
         """Инициализация обработчика команд."""
         self.db = db()
         self.cmd_number = "0"
-        self.commands: Dict[str, Command] = {}
+        self.commands: dict[str, Command] = {}
 
     def prepare(self) -> None:
         """
@@ -83,6 +81,6 @@ def init_handler() -> CommandHandler:
     handler.register_command("1", Command("Добавить книгу", add_book))
     handler.register_command("2", Command("Удалить книгу", delete_book))
     handler.register_command("3", Command("Изменить статус книги", change_book_status))
-    handler.register_command("4", Command("Найти книгу", search_book))
+    handler.register_command("4", Command("Найти книгу", search))
     handler.register_command("5", Command("Показать все книги", show_all_books))
     return handler

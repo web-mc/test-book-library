@@ -2,7 +2,7 @@ from typing import Any
 
 from src.database import Database
 
-from .utils import Paginator
+from src.utils import Paginator
 
 
 def show_all_books(db: Database) -> None:

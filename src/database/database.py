@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Generator
 
 from ..book import Book
 
@@ -37,4 +37,8 @@ class Database(ABC):
     def get_books_by_year(
         self, ondition_data: tuple[str, *tuple[int, ...]]
     ) -> tuple[Any, ...]:
+        pass
+
+    @abstractmethod
+    def get_all_books(self) -> None | Generator[tuple[Any, ...], None, None]:
         pass

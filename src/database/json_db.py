@@ -1,7 +1,7 @@
 import json
 from itertools import islice
 from pathlib import Path
-from typing import Any
+from typing import Any, Generator
 
 from src.book import Book
 from src.config import app_config
@@ -94,3 +94,12 @@ class JsonDB(Database):
         # делаем генератор с уже нужными нам рещультатми поиска
         result = (book for book in books.values() if filters[operator](book))
         return tuple(tuple(value.values()) for value in result)
+
+    def get_all_books(self) -> None | Generator[tuple[Any, ...], None, None]:
+        with open(self.file, "r", encoding="utf-8") as file:
+            books = json.load(file)
+
+        if not books:
+            return None
+
+        return (tuple(book.values()) for book in books.values())

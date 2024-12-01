@@ -1,7 +1,7 @@
 from logging import getLogger
 from logging.config import dictConfig
 
-from src.command_handler import init_handler
+from src.commands import init_handler
 from src.config import LOGGERS, app_config
 
 

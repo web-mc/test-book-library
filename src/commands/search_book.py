@@ -1,37 +1,37 @@
-from typing import Callable
-
 from src.database import Database
 from src.utils import get_field
 
-from .utils import SearchEngine
+from src.utils import SearchEngine
 
 
-def search_book(db: Database) -> None:
+def search(db: Database) -> None:
     print("Начат поиск книги.")
 
     engine = SearchEngine(db)
     while engine.stay_in_menu:
-        option = _get_search_option_from_user(engine.search_options)
+        request = _get_request_from_user(engine.list_commands())
 
-        if not option:
+        if not request:
             return
 
-        engine.search(option)
+        result = engine.run_search(request)
+        if result:
+            engine.show_results(result)
 
 
-def _get_search_option_from_user(options: dict[int, tuple[str, Callable]]) -> int:
+def _get_request_from_user(options: list[tuple[str, str]]) -> str:
     options_list = []
     menu_numbers = ["0"]
-    for number, value in options.items():
-        options_list.append(f"{number}. {value[0]}")
-        menu_numbers.append(str(number))
+    for command in options:
+        options_list.append(f"{command[0]}. {command[1]}")
+        menu_numbers.append(str(command[0]))
 
     menu = f"0. В главное меню | {' | '.join(options_list)}"
     while True:
         print("\nПоиск книги. Выбирите нужную команду введя цифру:")
         print(menu)
-        choice = get_field("Поиск книги. Введите цифру: ")
-        if choice not in menu_numbers:
+        request = get_field("Поиск книги. Введите цифру: ")
+        if request not in menu_numbers:
             print("Поиск книги. Некорректный ввод. Пожалуйста, введите цифру из меню.")
             continue
-        return int(choice)
+        return request
