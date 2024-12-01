@@ -1,10 +1,11 @@
 # Система управления библиотекой
 
-Другие ссылки на документы:
+Документация по основным компонентам приложения:
 
+ - [Хронение данных](src/database/README.md)
  - [Устройство поиска](src/utils/search_engine/README.md)
- - [Модуль с командами](src/commands/README.md)
- - [Пагинатор](src/utils/paginator/README.md)
+ - [Менеджмент команд командами](src/commands/README.md)
+ - [Постраниченое отображение результатов](src/utils/paginator/README.md)
 
 ## Описание
 
