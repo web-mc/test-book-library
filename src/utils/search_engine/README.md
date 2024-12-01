@@ -1,6 +1,6 @@
 # Модуль SearchEngine
 
-[Вернуться в основной README.md](README.md)
+[Вернуться в основной README.md](/README.md)
 
 ## Описание
 
