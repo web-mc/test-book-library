@@ -1,29 +1,36 @@
-from ..database import Database
-from ..utils import get_field
+from src.database import Database
+from src.utils import get_field
 
 
 def delete_book(db: Database) -> None:
     print("Начато удаление книги.")
-    book_id = get_field("Введите ID книги для удаления: ")
+    title = "Удаление книги"
 
-    book = db.get_book_by_id(book_id)
-    if not book:
-        print(f"Книги с ID '{book_id}' нет в библиотеке. Пропускаем удаление.")
-        return
-
-    confirmation = _get_del_confimation()
-    if confirmation:
-        db.del_book_by_id(book_id)
-        print(f"Удалена книга: {book.dump()}")
-    else:
-        print("Удаление книги отменено.")
-
-
-def _get_del_confimation() -> bool:
     while True:
-        confirm = get_field("Подтверждаете удаление книги? [1-Да/2-Нет]: ")
+        book_id = get_field(
+            f"{title}. Введите ID книги или '0' для выхода в главное меню: "
+        )
+        if book_id == "0":
+            return
+
+        book = db.get_book_by_id(book_id)
+        if not book:
+            print(f"{title}. Книги с ID '{book_id}' нет в библиотеке.")
+            continue
+
+        confirmation = _get_del_confimation(title)
+        if confirmation:
+            db.del_book_by_id(book_id)
+            print(f"{title}. Книга удалена: {book.dump()}")
+        else:
+            print(f"{title}. Отмена удаления.")
+
+
+def _get_del_confimation(title: str) -> bool:
+    while True:
+        confirm = get_field(f"{title}. Подтверждаете удаление книги? [1-Да/2-Нет]: ")
         if confirm not in ["1", "2"]:
-            print("Некорректный ввод. Пожалуйста, введите 1 или 2.")
+            print(f"{title}. Некорректный ввод. Пожалуйста, введите 1 или 2.")
             continue
 
         if confirm == "1":

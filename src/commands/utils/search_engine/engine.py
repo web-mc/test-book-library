@@ -57,10 +57,10 @@ class SearchEngine:
 
         self.search_options[option][1]()
 
-    def _search_by_title(self) -> None:
+    def _search_by_title(self) -> None:  # TODO: _search_by_title
         pass
 
-    def _search_by_author(self) -> None:
+    def _search_by_author(self) -> None:  # TODO: _search_by_author
         pass
 
     def _search_by_year(self) -> None:

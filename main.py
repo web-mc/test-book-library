@@ -1,33 +1,31 @@
 from logging import getLogger
 from logging.config import dictConfig
 
-from src.commands import is_valid_command, show_commands
+from src.command_handler import init_handler
 from src.config import LOGGERS, app_config
-from src.database import JsonDB
-from src.manager import Manager
 
 
 def main() -> None:
     """
     Точка входа для приложения.
 
-    Создает экземпляр Manager, выводит список доступных команд,
+    Создает экземпляр CommandHandler, выводит список доступных команд,
     получает ввод от пользователя, обрабатывает команды и
     останавливает приложение, если пользователь выбрал соответствующую команду.
     """
-    manager = Manager(JsonDB)
-    manager.prepare()
+    handler = init_handler()
+    handler.prepare()
 
     print("\nКнижный менеджер запущен.")
     while True:
-        show_commands()
-        number = input("\nВведите номер команды: ").strip()
+        handler.show_commands()
+        command = input("\nВведите номер команды: ").strip()
 
-        if not is_valid_command(number):
+        if not handler.is_valid_command(command):
             continue
 
-        manager.execute_command(number)
-        if not manager.exit():
+        handler.execute(command)
+        if not handler.exit():
             continue
 
         break

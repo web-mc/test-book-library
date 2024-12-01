@@ -1,8 +1,8 @@
 import re
 
-from ..book import Book
-from ..database import Database
-from ..utils import get_field
+from src.book import Book
+from src.database import Database
+from src.utils import get_field
 
 
 def add_book(db: Database) -> None:
@@ -14,47 +14,48 @@ def add_book(db: Database) -> None:
     она сохраняется в базе данных.
     """
     print("\nНачато добавление книги.")
-    book = _get_new_book_from_user()
+    title = "Добавление книги"
+    book = _get_new_book_from_user(title)
 
     if _is_duplicate(db, book.id):
-        print(f"Такая книга уже добавлена. Её ID '{book.id}'.")
+        print(f"{title}. Такая книга уже добавлена. Её ID '{book.id}'.")
         return
 
     db.save_book(book)
-    print(f"\nКнига добавлена в библиотеку.\nID книги '{book.id}'")
+    print(f"\n{title}. Книга добавлена в библиотеку.\nID книги '{book.id}'")
 
 
-def _get_new_book_from_user() -> Book:
+def _get_new_book_from_user(title: str) -> Book:
     """
     Запрашивает у пользователя данные для новой книги и
     возвращает объект Book.
     """
     book = Book()
-    book.title = get_field("Введите название книги: ").capitalize()
-    book.author = _get_author_from_user()
-    book.year = _get_year_from_user()
+    book.title = get_field(f"{title}. Введите название: ").capitalize()
+    book.author = _get_author_from_user(title)
+    book.year = _get_year_from_user(title)
 
     book.generate_book_id()
     return book
 
 
-def _get_year_from_user() -> int:
+def _get_year_from_user(title: str) -> int:
     while True:
-        year = get_field("Введите год книги(только цифры): ")
+        year = get_field(f"{title}. Введите год(только цифры): ")
         if year.isdigit():
             return int(year)
-        print(f'Выражение "{year}" не является цифрой.\n')
+        print(f'{title}. Выражение "{year}" не является цифрой.\n')
 
 
-def _get_author_from_user() -> str:
+def _get_author_from_user(title: str) -> str:
     while True:
         author = get_field(
-            "Укажите автора в формате 'Фамилия И. О.'. регистр и точки не важены: "
+            f"{title}. Укажите автора в формате 'Фамилия И. О.'. регистр и точки не важены: "
         )
         author = author.lower().strip()
         pattern = r"^[a-zа-яё \.]+ [a-zа-яё]\.? [a-zа-яё]\.?$"
         if not re.match(pattern, author):
-            print(f"Значение '{author}' не соответсвтует шаблону 'Фамилия И. О.'\n")
+            print(f"{title}. Значение '{author}' не соответсвтует шаблону 'Фамилия И. О.'\n")
             continue
 
         lst = author.split()

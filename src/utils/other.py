@@ -7,4 +7,4 @@ def get_field(prompt: str) -> str:
         value = input(prompt).strip()
         if value:
             return value
-        print("Вы не ввели значение.\n")
+        print("Вы не ввели значение.")

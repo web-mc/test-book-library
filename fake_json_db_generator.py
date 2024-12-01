@@ -72,8 +72,7 @@ def generate_random_data() -> Generator[Dict[str, str | Any], None, None]:
         }
 
 
-# Пример использования
-if __name__ == "__main__":
+def main() -> None:
     data_generator = generate_random_data()
     books = {}
     for i in range(1, 13):
@@ -85,3 +84,10 @@ if __name__ == "__main__":
 
     with open(app_config.data_file, "w", encoding="utf-8") as json_file:
         json.dump(books, json_file, indent=4, ensure_ascii=False)
+
+    print("Генерация фейковых данных завершена.")
+
+
+# Пример использования
+if __name__ == "__main__":
+    main()
