@@ -1,7 +1,6 @@
 from typing import Any
 
 from src.database import Database
-
 from src.utils import Paginator
 
 

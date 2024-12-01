@@ -1,7 +1,5 @@
 from src.database import Database
-from src.utils import get_field
-
-from src.utils import SearchEngine
+from src.utils import SearchEngine, get_field
 
 
 def search(db: Database) -> None:

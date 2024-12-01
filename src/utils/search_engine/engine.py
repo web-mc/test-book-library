@@ -9,7 +9,7 @@ from .text import calculate_similarity
 
 
 class Command:
-    """Класс, представляющий одну команду."""
+    """Класс, представляющий одну поисковую команду."""
 
     def __init__(self, title: str, function: Callable) -> None:
         """
@@ -33,11 +33,70 @@ class SearchEngine:
         self._init_commands()
 
     def run_search(self, cmd_number: str) -> tuple[Any, ...]:
+        """
+        Выполняет команду поиска на основе указанного номера команды.
+        """
         if cmd_number == "0":
             self.stay_in_menu = False
             return ()
 
         return self.commands[cmd_number].execute()
+
+    def _search_by(self, search_type: str) -> tuple[Any, ...]:
+        """
+        Выполняет поиск книг по заданному типу поиска
+        и возвращает отсортированные результаты.
+
+        Метод запрашивает у пользователя условие поиска
+        и извлекает все книги из базы данных. Если книги отсутствуют,
+        выводится сообщение об этом. В противном случае, книги
+        сортируются по степени схожести с запросом пользователя,
+        и возвращается кортеж из первых 15 наиболее релевантных результатов.
+        """
+        title = f"Поиск по {search_type}"
+
+        while True:
+            msg = f"{title}. Введите условие поиска или '0' для выхода в меню поиска: "
+            request = get_field(msg)
+
+            if request == "0":
+                return ()
+
+            books = self.db.get_all_books()
+            if not books:
+                print("В библиотеке нет книг.")
+                return ()
+
+            result = self._sort_by_similarity(request, search_type, books)
+            return result
+
+    def _search_by_author(self) -> tuple[Any, ...]:
+        return self._search_by("author")
+
+    def _search_by_title(self) -> tuple[Any, ...]:
+        return self._search_by("title")
+
+    def _search_by_year(self) -> tuple[Any, ...]:
+        title = "Поиск по году"
+
+        while True:
+            msg = f"{title}. Введите условие поиска или '0' для выхода в меню поиска: "
+            condition = get_field(msg)
+
+            if condition == "0":
+                return ()
+
+            condition_data = self._parse_year_condition(title, condition)
+            if not condition_data:
+                print(f"{title}. Некорректное условие для поиска. Смотрите справку.")
+                continue
+
+            books = self.db.get_books_by_year(condition_data)
+            if not books:
+                print(f"{title}. Не нашлось книг по условию '{condition}'.")
+                continue
+
+            return books
 
     def _init_commands(self) -> None:
         self._register_command("1", Command("Справка по поиску", self._show_help))
@@ -46,6 +105,12 @@ class SearchEngine:
         self._register_command("4", Command("Поиск по году", self._search_by_year))
 
     def list_commands(self) -> list[tuple[str, str]]:
+        """
+        Возвращает список кортежей, содержащих номера команд и их названия.
+
+        Проходит по словарю команд, извлекая номер и название каждой команды,
+        и добавляет их в список в виде кортежей.
+        """
         list_commands = []
         for cmd_number, cmd in self.commands.items():
             list_commands.append((cmd_number, cmd.title))
@@ -57,7 +122,11 @@ class SearchEngine:
         self.commands[cmd_number] = command
 
     def execute(self, cmd_number: str) -> None:
-        """Выполнение команды по её ключу."""
+        """
+        Выполняет зарегистрированную команду из self.commands,
+        обращаясь в ней ко номеру команды.
+
+        """
         self.commands[cmd_number].execute()
         self.cmd_number = cmd_number
 
@@ -87,36 +156,16 @@ class SearchEngine:
         print(year_help)
         print(text_help)
 
-    def _search_by(self, search_type: str) -> tuple[Any, ...]:
-        title = f"Поиск по {search_type}"
-
-        while True:
-            msg = f"{title}. Введите условие поиска или '0' для выхода в меню поиска: "
-            request = get_field(msg)
-
-            if request == "0":
-                return ()
-
-            books = self.db.get_all_books()
-            if not books:
-                print("В библиотеке нет книг.")
-                return ()
-
-            result = self._sort_by_similarity(request, search_type, books)
-            return result
-
-    def _search_by_author(self) -> tuple[Any, ...]:
-        return self._search_by("author")
-
-    def _search_by_title(self) -> tuple[Any, ...]:
-        return self._search_by("title")
-
     def _sort_by_similarity(
         self,
         request: str,
         attribute: str,
         books: Generator[Any, None, None],
     ) -> tuple[Any, ...]:
+        """
+        Сортирует список книг по степени схожести с поисковым запросом,
+        на основе указанного атрибута и возвращает 15 наиболее релевантных результатов.
+        """
         # 1 - проходимся по книгам и сортируем по убыванию похожести по нужным атрибутам
         # 2 - возвращаем 15 первых результатов
         result = []
@@ -134,6 +183,10 @@ class SearchEngine:
         return tuple(book for book in result[:15])
 
     def _clean_string(self, string: str) -> str:
+        """
+        Очищает строку, удаляя все неалфавитно-цифровые символы
+        и преобразуя её в нижний регистр.
+        """
         result = ""
         for char in string:
             if char.isalnum():
@@ -141,40 +194,23 @@ class SearchEngine:
         return result.lower()
 
     def _quick_sort(self, books: list[tuple[Any, ...]]) -> list[tuple[Any, ...]]:
-        # Сортируем по убыванию похожести
+        """
+        Сортирует список книг по убыванию степени схожести.
+
+        Метод реализует алгоритм быстрой сортировки для упорядочивания книг
+        по значению схожести, которое находится на 5-м индексе каждого кортежа книги.
+        """
 
         if len(books) <= 1:
             return books
 
-        pivot = books[len(books) // 2][5]  # Сравниваем по второму элементу в кортеже
+        pivot = books[len(books) // 2][5]  # Сравниваем по 5 элементу в кортеже
 
         left = [x for x in books if x[5] > pivot]
         middle = [x for x in books if x[5] == pivot]
         right = [x for x in books if x[5] < pivot]
 
         return self._quick_sort(left) + middle + self._quick_sort(right)
-
-    def _search_by_year(self) -> tuple[Any, ...]:
-        title = "Поиск по году"
-
-        while True:
-            msg = f"{title}. Введите условие поиска или '0' для выхода в меню поиска: "
-            condition = get_field(msg)
-
-            if condition == "0":
-                return ()
-
-            condition_data = self._parse_year_condition(title, condition)
-            if not condition_data:
-                print(f"{title}. Некорректное условие для поиска. Смотрите справку.")
-                continue
-
-            books = self.db.get_books_by_year(condition_data)
-            if not books:
-                print(f"{title}. Не нашлось книг по условию '{condition}'.")
-                continue
-
-            return books
 
     def show_results(self, search_results: tuple[Any, ...]) -> None:
         paginator = Paginator()
@@ -190,6 +226,26 @@ class SearchEngine:
         title: str,
         condition: str,
     ) -> None | tuple[str, *tuple[int, ...]]:
+        """
+        Парсит строку условия для поиска по годам и возвращает кортеж с
+        символом сравнения и годами.
+
+        Функция обрабатывает строку условия, проверяет её корректность и
+        возвращает результат в виде кортежа. Если строка содержит
+        некорректные данные, возвращается None.
+
+        Args:
+            title (str): Заголовок для контекста ошибки.
+            condition (str): Строка условия,введённая пользователем,
+                    для фильтрации по годам.
+
+        Returns:
+            tuple: Кортеж, где первый элемент — символ сравнения ('=', '<', '>', '-'),
+                а второй — один или несколько целых чисел (годы). В случае
+                символа '-', функция проверяет, что начальный год меньше
+                конечного, и возвращает None при несоблюдении этого условия.
+        """
+
         pattern = r"^[=<>-]\d+,?[\d+]?"
         res = re.match(pattern, condition)
         if not res:

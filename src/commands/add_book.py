@@ -55,7 +55,9 @@ def _get_author_from_user(title: str) -> str:
         author = author.lower().strip()
         pattern = r"^[a-zа-яё \.]+ [a-zа-яё]\.? [a-zа-яё]\.?$"
         if not re.match(pattern, author):
-            print(f"{title}. Значение '{author}' не соответсвтует шаблону 'Фамилия И. О.'\n")
+            print(
+                f"{title}. Значение '{author}' не соответсвтует шаблону 'Фамилия И. О.'\n"
+            )
             continue
 
         lst = author.split()

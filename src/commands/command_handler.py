@@ -3,14 +3,14 @@ from typing import Callable
 from src.database import Database, JsonDB
 
 from .add_book import add_book
-from .show_all_books import show_all_books
+from .change_status import change_book_status
 from .delete import delete_book
 from .search_book import search
-from .change_status import change_book_status
+from .show_all_books import show_all_books
 
 
 class Command:
-    """Класс, представляющий одну команду."""
+    """Класс, представляющий одну команду приложения."""
 
     def __init__(self, title: str, function: Callable) -> None:
         """
