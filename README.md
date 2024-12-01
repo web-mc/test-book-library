@@ -3,9 +3,9 @@
 Другие ссылки на документы:
 
  - [Устройство поиска](src/utils/search_engine/README.md)
- - [Модуль с командами](src/utils/search_engine/README.md)
- - [Пагинатор](src/utils/search_engine/README.md)
-
+ - [Модуль с командами](src/commands/README.md)
+ - [Пагинатор](src/utils/paginator/README.md)
+D:\Coding_projects\1-MY PROJECTS\3-test-tasks\test-book-library\src\utils\paginator\README.md
 
 ## Описание
 
